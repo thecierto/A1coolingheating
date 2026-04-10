@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Request Service — AirPro HVAC</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Literata:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --orange: #d4521a;
+    --green:  #1a7a3a;
+    --border: #d9d3ca;
+    --bg:     #f5f2ee;
+    --text:   #1a1714;
+    --dim:    #7a7369;
+  }
+
+  body {
+    font-family: 'Literata', Georgia, serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 20px 16px 60px;
+  }
+
+  .card {
+    background: #fff;
+    border-radius: 20px;
+    padding: 28px 24px 32px;
+    width: 100%;
+    max-width: 480px;
+    box-shadow: 0 4px 32px rgba(0,0,0,0.10);
+  }
+
+  .card-title {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 22px;
+    margin-bottom: 4px;
+  }
+  .card-sub {
+    font-size: 14px;
+    color: var(--dim);
+    margin-bottom: 24px;
+    font-style: italic;
+    line-height: 1.5;
+  }
+
+  .row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+  .fg { margin-bottom: 15px; }
+  .fl {
+    display: block;
+    font-family: 'Syne', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.7px;
+    color: var(--dim);
+    margin-bottom: 5px;
+  }
+  .fi {
+    width: 100%;
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    padding: 12px 14px;
+    font-family: 'Literata', serif;
+    font-size: 15px;
+    color: var(--text);
+    background: var(--bg);
+    outline: none;
+    transition: border-color 0.15s;
+  }
+  .fi:focus { border-color: var(--orange); }
+  textarea.fi { resize: vertical; min-height: 90px; }
+
+  .submit-btn {
+    width: 100%;
+    background: var(--orange);
+    color: #fff;
+    border: none;
+    border-radius: 12px;
+    padding: 15px;
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 16px;
+    cursor: pointer;
+    margin-top: 8px;
+    transition: opacity 0.15s, transform 0.1s;
+  }
+  .submit-btn:hover { opacity: 0.92; }
+  .submit-btn:active { transform: scale(0.98); }
+
+  .success {
+    display: none;
+    text-align: center;
+    padding: 32px 16px;
+  }
+  .success-icon { font-size: 52px; margin-bottom: 14px; }
+  .success-title {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 22px;
+    color: var(--green);
+    margin-bottom: 8px;
+  }
+  .success-sub { font-size: 15px; color: var(--dim); line-height: 1.6; }
+
+  .required-note {
+    font-size: 12px;
+    color: var(--dim);
+    font-style: italic;
+    margin-top: -8px;
+    margin-bottom: 16px;
+  }
+
+  /* Configurable: set this to your CRM app URL */
+  /* See the CONFIGURATION section in the script below */
+</style>
+</head>
+<body>
+
+<div class="card">
+  <!-- SUCCESS STATE -->
+  <div class="success" id="successMsg">
+    <div class="success-icon">✅</div>
+    <div class="success-title">Request Received!</div>
+    <div class="success-sub">Thank you! Our team will reach out to you shortly to discuss your HVAC needs.</div>
+  </div>
+
+  <!-- FORM -->
+  <div id="formFields">
+    <div class="card-title">🌡️ Request Service</div>
+    <div class="card-sub">Fill out the form and our team will be in touch shortly — usually within a few hours.</div>
+    <div class="required-note">* Required fields</div>
+
+    <div class="row">
+      <div class="fg">
+        <label class="fl" for="f-first">First Name *</label>
+        <input class="fi" id="f-first" placeholder="Jane" autocomplete="given-name">
+      </div>
+      <div class="fg">
+        <label class="fl" for="f-last">Last Name</label>
+        <input class="fi" id="f-last" placeholder="Doe" autocomplete="family-name">
+      </div>
+    </div>
+
+    <div class="fg">
+      <label class="fl" for="f-phone">Phone *</label>
+      <input class="fi" id="f-phone" type="tel" placeholder="(555) 000-0000" autocomplete="tel">
+    </div>
+
+    <div class="fg">
+      <label class="fl" for="f-email">Email</label>
+      <input class="fi" id="f-email" type="email" placeholder="jane@email.com" autocomplete="email">
+    </div>
+
+    <div class="fg">
+      <label class="fl" for="f-address">Service Address</label>
+      <input class="fi" id="f-address" placeholder="123 Main St, City, ST" autocomplete="street-address">
+    </div>
+
+    <div class="fg">
+      <label class="fl" for="f-service">Service Needed *</label>
+      <select class="fi" id="f-service">
+        <option value="">Select a service…</option>
+        <option>AC Installation</option>
+        <option>AC Repair</option>
+        <option>Heating Repair</option>
+        <option>Heating Installation</option>
+        <option>Preventive Maintenance</option>
+        <option>Duct Cleaning</option>
+        <option>System Inspection</option>
+        <option>Emergency Service</option>
+        <option>Other</option>
+      </select>
+    </div>
+
+    <div class="fg">
+      <label class="fl" for="f-notes">Tell Us More</label>
+      <textarea class="fi" id="f-notes" placeholder="Describe the issue, system age, urgency…"></textarea>
+    </div>
+
+    <button class="submit-btn" onclick="submitForm()">Request Service →</button>
+  </div>
+</div>
+
+<script>
+  // ─────────────────────────────────────────
+  //  CONFIGURATION — edit this URL to point
+  //  to wherever you are running the CRM app
+  // ─────────────────────────────────────────
+  const CRM_APP_URL = 'hvac-leads.html';
+  // When hosted on GitHub Pages this will be:
+  // const CRM_APP_URL = 'https://thecierto.github.io/A1coolingheating/hvac-leads.html';
+  // ─────────────────────────────────────────
+
+  function submitForm() {
+    const first   = document.getElementById('f-first').value.trim();
+    const last    = document.getElementById('f-last').value.trim();
+    const phone   = document.getElementById('f-phone').value.trim();
+    const email   = document.getElementById('f-email').value.trim();
+    const address = document.getElementById('f-address').value.trim();
+    const service = document.getElementById('f-service').value;
+    const notes   = document.getElementById('f-notes').value.trim();
+
+    if (!first) { alert('Please enter your first name.'); document.getElementById('f-first').focus(); return; }
+    if (!phone) { alert('Please enter your phone number.'); document.getElementById('f-phone').focus(); return; }
+    if (!service) { alert('Please select a service.'); document.getElementById('f-service').focus(); return; }
+
+    // Method 1: localStorage (works when form & CRM are on the same domain/device)
+    try {
+      const pending = JSON.parse(localStorage.getItem('airpro_pending_leads') || '[]');
+      pending.push({ first, last, phone, email, address, service, notes });
+      localStorage.setItem('airpro_pending_leads', JSON.stringify(pending));
+    } catch(e) {}
+
+    // Method 2: URL param redirect (works cross-domain — opens CRM with lead in URL)
+    const params = new URLSearchParams({
+      airpro_lead: '1',
+      first, last, phone, email, address, service, notes, source: 'Website'
+    });
+    const crmURL = CRM_APP_URL + '?' + params.toString();
+
+    // Show success state
+    document.getElementById('formFields').style.display = 'none';
+    document.getElementById('successMsg').style.display = 'block';
+
+    // Silently ping CRM if it's a local file (same-origin localStorage is enough)
+    // For cross-domain: open CRM in background after a short delay
+    // Uncomment the line below if you want to auto-redirect staff to the CRM:
+    // setTimeout(() => window.open(crmURL, '_blank'), 1500);
+  }
+</script>
+</body>
+</html>
