@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+  <title>A1 Cooling &amp; Heating CRM</title>
+  <script>
+    // Clear any stale service workers and caches
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.getRegistrations().then(regs => {
+        regs.forEach(r => r.unregister());
+      });
+    }
+    if ('caches' in window) {
+      caches.keys().then(keys => keys.forEach(k => caches.delete(k)));
+    }
+    // Redirect with cache-busting query string so browser fetches fresh copy
+    var dest = 'hvac-leads-2.html?v=' + Date.now();
+    window.location.replace(dest);
+  </script>
+</head>
+<body></body>
+</html>
